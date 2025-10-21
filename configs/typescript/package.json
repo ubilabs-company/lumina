@@ -1,0 +1,8 @@
+{
+  "name": "@lumina/typescript",
+  "private": true,
+  "files": [
+    "node.json",
+    "react.json"
+  ]
+}
