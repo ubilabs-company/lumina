@@ -2,6 +2,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import {
   type FastifyZodInstance,
   hasZodFastifySchemaValidationErrors,
+  isResponseSerializationError,
 } from 'fastify-type-provider-zod'
 import {
   ApiError,
@@ -14,6 +15,7 @@ type FastifyErrorHandler = FastifyZodInstance['errorHandler']
 
 export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
+    console.log(error.validation)
     return reply
       .status(400)
       .send(
@@ -25,6 +27,10 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
 
   if (error instanceof ApiError) {
     return reply.status(error.status).send(error.format(request.url))
+  }
+
+  if (isResponseSerializationError(error)) {
+    console.error(`Response doesn't match the schema: ${error.cause.issues}`)
   }
 
   console.error(error)

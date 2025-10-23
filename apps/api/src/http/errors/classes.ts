@@ -33,9 +33,11 @@ export class BadRequestError extends ApiError {
     issues: z
       .array(
         z.object({
-          code: z.string(),
+          keyword: z.string(),
+          instancePath: z.string(),
+          schemaPath: z.string(),
           message: z.string(),
-          path: z.array(z.union([z.string(), z.number()])),
+          params: z.record(z.string(), z.string()),
         }),
       )
       .optional(),
